@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>Travel Trippy — Discover India's Best Kept Secrets</title>
+  <meta name="title" content="Travel Trippy — Discover India's Best Kept Secrets">
+  <meta name="description" content="Explore offbeat travel destinations, hidden gems, local cuisines, and secret spots across India. Get personalized AI recommendations and custom trip itineraries.">
+  <meta name="keywords" content="travel trippy, hidden gems india, offbeat travel, travel companion, smart trip planner, india travel guide, secret tourist spots">
+  <meta name="author" content="Travel Trippy Team">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://traveltrippy.co/">
+  <meta property="og:title" content="Travel Trippy — Discover India's Best Kept Secrets">
+  <meta property="og:description" content="Explore offbeat travel destinations, hidden gems, local cuisines, and secret spots across India. Get personalized AI recommendations and custom trip itineraries.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1506461883276-594a12b11db3?auto=format&fit=crop&w=1200&h=630&q=80">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Travel Trippy — Discover India's Best Kept Secrets">
+  <meta property="twitter:description" content="Explore offbeat travel destinations, hidden gems, local cuisines, and secret spots across India. Get personalized AI recommendations and custom trip itineraries.">
+  
+  <!-- Leaflet.js Map CSS & JS CDNs -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Lucide Icons CDN for sleek UI icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Anti-FOUC Theme Script (sets theme before page renders) -->
+  <script>
+    (function() {
+      try {
+        const stored = localStorage.getItem('tt_state');
+        let theme = 'light';
+        if (stored) {
+          const state = JSON.parse(stored);
+          if (state && state.theme) theme = state.theme;
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          theme = 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Persistent Navigation Bar -->
+  <nav class="nav nav--glass" id="main-nav">
+    <div class="nav__inner">
+      <a href="#/" class="nav__logo">
+        <div class="nav__logo-icon">✈️</div>
+        <span>TravelTrippy</span>
+      </a>
+      
+      <div class="nav__links">
+        <a href="#/" class="nav__link nav__link--active"><i data-lucide="home" class="nav-icon"></i> Home</a>
+        <a href="#/explore" class="nav__link"><i data-lucide="compass" class="nav-icon"></i> Explore</a>
+        <a href="#/planner" class="nav__link"><i data-lucide="map" class="nav-icon"></i> Trip Planner</a>
+        <a href="#/gallery" class="nav__link"><i data-lucide="image" class="nav-icon"></i> Gallery</a>
+        <a href="#/food" class="nav__link"><i data-lucide="utensils" class="nav-icon"></i> Food Guide</a>
+        <a href="#/nearby" class="nav__link"><i data-lucide="navigation" class="nav-icon"></i> Nearby</a>
+        <a href="#/dashboard" class="nav__link"><i data-lucide="layout-dashboard" class="nav-icon"></i> My Trips</a>
+      </div>
+      
+      <div class="nav__actions">
+        <a href="#/profile" class="nav__link" style="padding: var(--space-2) var(--space-4);" title="Travel Profile">
+          <i data-lucide="user" class="nav-icon"></i> Profile
+        </a>
+        <button class="nav__theme-btn" id="theme-toggle-btn" aria-label="Toggle Theme">
+          <i data-lucide="sun" class="sun-icon"></i>
+          <i data-lucide="moon" class="moon-icon" style="display: none;"></i>
+        </button>
+        <button class="nav__menu-btn" id="mobile-menu-btn" aria-label="Open Navigation Menu">
+          <i data-lucide="menu"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Slide-out -->
+  <div class="nav__mobile-overlay" id="mobile-overlay"></div>
+  <div class="nav__mobile-menu" id="mobile-menu">
+    <div class="flex flex--between" style="margin-bottom: var(--space-6);">
+      <span style="font-weight: 800; font-size: 1.2rem; font-family: var(--font-heading);">Menu</span>
+      <button id="close-menu-btn" style="font-size: 1.5rem; color: var(--text-secondary);"><i data-lucide="x"></i></button>
+    </div>
+    <a href="#/" class="nav__link"><i data-lucide="home"></i> Home</a>
+    <a href="#/explore" class="nav__link"><i data-lucide="compass"></i> Explore Hidden Gems</a>
+    <a href="#/planner" class="nav__link"><i data-lucide="map"></i> AI Trip Planner</a>
+    <a href="#/gallery" class="nav__link"><i data-lucide="image"></i> Gallery</a>
+    <a href="#/food" class="nav__link"><i data-lucide="utensils"></i> Food Guide</a>
+    <a href="#/nearby" class="nav__link"><i data-lucide="navigation"></i> Nearby Map</a>
+    <a href="#/dashboard" class="nav__link"><i data-lucide="layout-dashboard"></i> My Dashboard</a>
+    <a href="#/profile" class="nav__link"><i data-lucide="user"></i> Preferences Profile</a>
+  </div>
+
+  <!-- SPA Router Mount Point -->
+  <main id="app" class="app-mount-point" style="margin-top: var(--nav-height); transition: opacity var(--transition-base), transform var(--transition-base); min-height: calc(100vh - var(--nav-height));"></main>
+
+  <!-- Persistent AI Chatbot Widget -->
+  <div id="chatbot-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer" style="background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: var(--space-12) 0; color: var(--text-secondary);">
+    <div class="container grid grid--4">
+      <div>
+        <div class="nav__logo" style="margin-bottom: var(--space-4);">
+          <div class="nav__logo-icon">✈️</div>
+          <span>TravelTrippy</span>
+        </div>
+        <p style="font-size: var(--fs-sm); color: var(--text-tertiary);">An AI-powered travel companion to discover offbeat destinations, cultural heritage, and local cuisines across India.</p>
+      </div>
+      <div>
+        <h4 style="margin-bottom: var(--space-4); font-size: var(--fs-md); font-family: var(--font-heading);">Features</h4>
+        <ul style="font-size: var(--fs-sm); line-height: 2;">
+          <li><a href="#/explore">Hidden Gems Explorer</a></li>
+          <li><a href="#/planner">Smart Trip Planner</a></li>
+          <li><a href="#/nearby">Nearby Discoveries Map</a></li>
+          <li><a href="#/food">Regional Food Guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="margin-bottom: var(--space-4); font-size: var(--fs-md); font-family: var(--font-heading);">Community</h4>
+        <ul style="font-size: var(--fs-sm); line-height: 2;">
+          <li><a href="#/dashboard">Saved Itineraries</a></li>
+          <li><a href="#/profile">Personalized Feed</a></li>
+          <li><a href="#/gallery">Travel Gallery</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="margin-bottom: var(--space-4); font-size: var(--fs-md); font-family: var(--font-heading);">About India</h4>
+        <p style="font-size: var(--fs-sm); color: var(--text-tertiary);">India holds some of the world's most unique ecological wonders, ancient living heritage, and incredible tribal communities. Let's travel responsibly.</p>
+      </div>
+    </div>
+    <div class="container text-center" style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-color); font-size: var(--fs-xs); color: var(--text-muted);">
+      © 2026 Travel Trippy. Made with ❤️ for explorers. Explore offbeat, stay local.
+    </div>
+  </footer>
+
+  <!-- Core Data & Framework -->
+  <script src="js/data.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/router.js"></script>
+
+  <!-- Page View Renderers -->
+  <script src="js/pages/home.js"></script>
+  <script src="js/pages/explore.js"></script>
+  <script src="js/pages/destination.js"></script>
+  <script src="js/pages/planner.js"></script>
+  <script src="js/pages/gallery.js"></script>
+  <script src="js/pages/food.js"></script>
+  <script src="js/pages/nearby.js"></script>
+  <script src="js/pages/dashboard.js"></script>
+  <script src="js/pages/profile.js"></script>
+
+  <!-- Persistent Components -->
+  <script src="js/components/chatbot.js"></script>
+
+  <!-- Main Entry Point -->
+  <script src="js/app.js"></script>
+</body>
+</html>
